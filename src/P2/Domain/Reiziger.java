@@ -3,7 +3,6 @@ package P2.Domain;
 import java.sql.Date;
 
 public class Reiziger {
-
     private int    idnummer;
     private String voorletters;
     private String tussenvoegsel;
@@ -17,6 +16,7 @@ public class Reiziger {
         this.achternaam    = achternaam;
         this.geboortedatum = Date.valueOf(geboortedatum);
     }
+
 
     public int getIdnummer(){
         return idnummer;
@@ -46,8 +46,8 @@ public class Reiziger {
     public void setAchternaam(String string){
         achternaam = string;
     }
-    public void setGeboortedatum(Date datum){
-        geboortedatum = datum;
+    public void setGeboortedatum(String datum){
+        geboortedatum = Date.valueOf(datum);
     }
 
     public String getNaam(){
