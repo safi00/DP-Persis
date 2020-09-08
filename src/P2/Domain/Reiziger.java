@@ -1,14 +1,17 @@
 package P2.Domain;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Reiziger {
-    private int    idNummer;
-    private String voorletters;
-    private String tussenvoegsel;
-    private String achternaam;
-    private Date   geboortedatum;
-    private Adres  huisadres;
+    private int                idNummer;
+    private String             voorletters;
+    private String             tussenvoegsel;
+    private String             achternaam;
+    private Date               geboortedatum;
+    private Adres              huisadres;
+    private List<OVChipkaart>  OVKaarten = new ArrayList<>();
 
     public Reiziger(int idNum, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
         this.idNummer      = idNum;
@@ -19,20 +22,26 @@ public class Reiziger {
     }
 
 
-    public int getIdNummer(){
+    public int               getIdNummer(){
         return idNummer;
     }
-    public String getVoorletters(){
+    public String            getVoorletters(){
         return voorletters;
     }
-    public String getTussenvoegsel(){
+    public String            getTussenvoegsel(){
         return tussenvoegsel;
     }
-    public String getAchternaam(){
+    public String            getAchternaam(){
         return achternaam;
     }
-    public Date getGeboortedatum(){
+    public Date              getGeboortedatum(){
         return geboortedatum;
+    }
+    public Adres             getHuisAdres(){
+        return huisadres;
+    }
+    public List<OVChipkaart> getOVKaarten() {
+        return OVKaarten;
     }
 
     public void setIdNummer(int id){
@@ -50,6 +59,12 @@ public class Reiziger {
     public void setGeboortedatum(String datum){
         geboortedatum = Date.valueOf(datum);
     }
+    public void setHuisadres(Adres ad) {
+        huisadres = ad;
+    }
+    public void setOVKaarten(OVChipkaart OVKaart) {
+        OVKaarten.add(OVKaart);
+    }
 
     public String getNaam(){
         String naam = voorletters + " ";
@@ -60,7 +75,6 @@ public class Reiziger {
         return naam;
     }
 
-    @Override
     public String toString() {
         return "Reiziger{#"     + idNummer + " "
                 + voorletters   + ". "
