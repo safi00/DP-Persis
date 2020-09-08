@@ -1,15 +1,21 @@
 package P2.Domain;
 
 public class Adres {
-    private int    adresID;
-    private String postcode;
-    private String huisnummer;
-    private String straat;
-    private String woonplaats;
-    private int    reizigerID;
+    private int      adresID;
+    private String   postcode;
+    private String   huisnummer;
+    private String   straat;
+    private String   woonplaats;
+    private Reiziger wooner;
 
-    public Adres(){}
-
+    public Adres(int aID, String pcode, String hNummer, String strt, String wPlaats, Reiziger reiz){
+        adresID    = aID;
+        postcode   = pcode;
+        huisnummer = hNummer;
+        straat     = strt;
+        woonplaats = wPlaats;
+        wooner     = reiz;
+    }
 
     public int getAdresID() {
         return adresID;
@@ -26,8 +32,8 @@ public class Adres {
     public String getWoonplaats() {
         return woonplaats;
     }
-    public int getReizigerID() {
-        return reizigerID;
+    public Reiziger getReiziger() {
+        return wooner;
     }
 
     public void setAdresID(int adresID) {
@@ -46,7 +52,7 @@ public class Adres {
         this.woonplaats = woonplaats;
     }
     public void setReizigerID(Reiziger reiziger) {
-        this.reizigerID = reiziger.getIdnummer();
+        this.wooner = reiziger;
     }
 
     public String toString() {
@@ -55,6 +61,6 @@ public class Adres {
                   ",\n huisnummer: '" + huisnummer + '\'' +
                   ",\n straat: '"     + straat + '\'' +
                   ",\n woonplaats: '" + woonplaats + '\'' +
-                  ",\n reizigerID: "  + reizigerID +'}';
+                  ",\n reiziger: "    + wooner +'}';
     }
 }

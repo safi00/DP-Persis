@@ -3,23 +3,24 @@ package P2.Domain;
 import java.sql.Date;
 
 public class Reiziger {
-    private int    idnummer;
+    private int    idNummer;
     private String voorletters;
     private String tussenvoegsel;
     private String achternaam;
     private Date   geboortedatum;
+    private Adres  huisadres;
 
-    public Reiziger(int idnummer, String voorletters, String tussenvoegsel, String achternaam, String geboortedatum) {
-        this.idnummer      = idnummer;
+    public Reiziger(int idNum, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
+        this.idNummer      = idNum;
         this.voorletters   = voorletters;
         this.tussenvoegsel = tussenvoegsel;
         this.achternaam    = achternaam;
-        this.geboortedatum = Date.valueOf(geboortedatum);
+        this.geboortedatum = geboortedatum;
     }
 
 
-    public int getIdnummer(){
-        return idnummer;
+    public int getIdNummer(){
+        return idNummer;
     }
     public String getVoorletters(){
         return voorletters;
@@ -34,8 +35,8 @@ public class Reiziger {
         return geboortedatum;
     }
 
-    public void setIdnummer(int id){
-        idnummer = id;
+    public void setIdNummer(int id){
+        idNummer = id;
     }
     public void setVoorletters(String string){
         voorletters = string;
@@ -59,11 +60,13 @@ public class Reiziger {
         return naam;
     }
 
-    public String toString(){
-        return  "De Reiziger id: "              + idnummer +      ".\n" +
-                "De Reiziger's voorletters: "   + voorletters +   ".\n" +
-                "De Reiziger's tussenvoegsel: " + tussenvoegsel + ".\n" +
-                "De Reiziger's lastname: "      + achternaam +    ".\n" +
-                "De Reiziger was born on: "     + geboortedatum;
+    @Override
+    public String toString() {
+        return "Reiziger{#"     + idNummer + " "
+                + voorletters   + ". "
+                + tussenvoegsel + " "
+                + achternaam    + ", geb."
+                + geboortedatum +
+                '}';
     }
 }

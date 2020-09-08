@@ -4,7 +4,10 @@ import P2.Domain.Adres;
 import P2.Domain.Reiziger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import java.sql.Date;
+
+import static org.junit.Assert.assertEquals;
 
 class DomainTest {
     private Reiziger testReiziger;
@@ -12,12 +15,12 @@ class DomainTest {
 
     @BeforeEach
     public void init(){
-        testReiziger = new Reiziger(0, "X","","Martina","1997-10-27");
-        testAdres = new Adres();
+        testReiziger = new Reiziger(0, "X","","Martina", Date.valueOf("1997-10-27"));
+        testAdres = new Adres(0,"","","","",testReiziger);
         testAdres.setAdresID(37);
         testAdres.setPostcode("4206XD");
         testAdres.setHuisnummer("37");
-        testAdres.setStraat("cookiestraat");
+        testAdres.setStraat("CookieStraat");
         testAdres.setWoonplaats("Cookie Town");
         testAdres.setReizigerID(testReiziger);
     }
@@ -26,15 +29,15 @@ class DomainTest {
     public void TestReiziger(){
         assertEquals(testReiziger.toString(), "De Reiziger id: 0.\n" +
                 "De Reiziger's voorletters: X.\n" +
-                "De Reiziger's tussenvoegsel: .\n" +
+                "De Reiziger's tussenVoegsel: .\n" +
                 "De Reiziger's lastname: Martina.\n" +
                 "De Reiziger was born on: 1997-10-27");
     }
 
     @Test
     public void TestReizigerSetID(){
-        testReiziger.setIdnummer(1);
-        assertEquals(testReiziger.getIdnummer(), 1);
+        testReiziger.setIdNummer(1);
+        assertEquals(testReiziger.getIdNummer(), 1);
     }
 
     @Test
@@ -44,7 +47,7 @@ class DomainTest {
     }
 
     @Test
-    public void TestReizigerSetTuseenvoegsel(){
+    public void TestReizigerSetTussenvoegsel(){
         testReiziger.setTussenvoegsel("de");
         assertEquals(testReiziger.getTussenvoegsel(), "de");
     }
@@ -73,6 +76,6 @@ class DomainTest {
                 ",\n huisnummer: '" + testAdres.getHuisnummer() + '\'' +
                 ",\n straat: '"     + testAdres.getStraat() + '\'' +
                 ",\n woonplaats: '" + testAdres.getWoonplaats() + '\'' +
-                ",\n reizigerID: "  + testAdres.getReizigerID() +'}');
+                ",\n reizigerID: "  + testAdres.getReiziger() +'}');
     }
 }

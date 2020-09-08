@@ -4,11 +4,29 @@ import P2.Domain.Adres;
 import java.util.List;
 
 public interface AdresDAO {
-    public boolean     save(Adres adres){}
-    public boolean     update(Adres adres){}
-    public boolean     delete(Adres adres){}
-    public Adres       findById(int id){}
-    public Adres       findByReizigerId(int id){}
-    public List<Adres> findByWoonplaats(String woonplaats){}
-    public List<Adres> findAll(){}
+    public static boolean     save(Adres adres){
+        return true;
+    }
+    public static boolean     update(Adres adres){
+        return true;
+    }
+    public static boolean     delete(Adres adres){
+        return true;
+    }
+    public static Adres       findById(int id){
+        Adres returnValue = null;
+        return returnValue;
+    }
+    public static Adres       findByReizigerId(int id){
+        Adres returnValue = null;
+        return returnValue;
+    }
+    public static List<Adres> findByWoonplaats(String woonplaats){
+        List<Adres> returnValue = null;
+        return returnValue;
+    }
+    public static List<Adres> findAll(){
+        List<Adres> returnValue = null;
+        return returnValue;
+    }
 }

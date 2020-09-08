@@ -1,13 +1,23 @@
 package P2;
 
-import org.junit.jupiter.api.Test;
+import P2.DAO.ReizigerDAO;
+import P2.Domain.Reiziger;
+
+import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Main {
-    public  void main(){}
-    private void getConnection(){}
-    private void closeConnection(){}
+//    public  void main(){}
+//
+//    private void getConnection(){
+//
+//    }
+//
+//    private void closeConnection(){
+//    }
+//
 //    private static void testReizigerDAO(ReizigerDAO rdao) throws SQLException {
 //        System.out.println("\n---------- Test ReizigerDAO -------------");
 //

@@ -3,6 +3,8 @@ package P2.DAO;
 import P2.Domain.Adres;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 
 public class AdresDAOsql implements AdresDAO {
@@ -11,38 +13,55 @@ public class AdresDAOsql implements AdresDAO {
     public AdresDAOsql(Connection conn){
 
     }
-
-    @Override
+    
     public boolean save(Adres adres) {
-        return false;
+        try {
+            String query = "INSERT INTO adres(adres_id,postcode,huisnummer,straat,woonplaats,reiziger_id VALUES (?,?,?,?,?,?);";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt   (1,adres.getAdresID());
+            ps.setString(2,adres.getPostcode());
+            ps.setString(3,adres.getHuisnummer());
+            ps.setString(4,adres.getStraat());
+            ps.setString(5,adres.getWoonplaats());
+            ps.setInt   (6,adres.getReiziger().getIdNummer());
+            ResultSet rs = ps.executeQuery();
+            System.out.println("adres saved.");
+            while (rs.next()){
+                System.out.println(
+                          "#" + rs.getString("adres_id")     + ": "+
+                                rs.getString("postcode")     + ". "+
+                                rs.getString("huisnummer")   + " " +
+                                "#" + rs.getString("straat") + " " +
+                                rs.getString("woonplaats")   + " " +
+                                  rs.getString("reiziger_id"));}
+        }catch (Exception e){
+            System.out.println("saving had an error");
+            e.printStackTrace();
+        }
+        return true;
     }
-
-    @Override
+    
     public boolean update(Adres adres) {
-        return false;
+        return true;
     }
 
-    @Override
+    
     public boolean delete(Adres adres) {
         return false;
     }
 
-    @Override
     public Adres findById(int id) {
         return null;
     }
-
-    @Override
-    public Adres findByReizigerId(int id) {
+    
+    public Adres findByAdresId(int id) {
         return null;
     }
-
-    @Override
+    
     public List<Adres> findByWoonplaats(String woonplaats) {
         return null;
     }
-
-    @Override
+    
     public List<Adres> findAll() {
         return null;
     }
