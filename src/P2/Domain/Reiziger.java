@@ -76,11 +76,22 @@ public class Reiziger {
     }
 
     public String toString() {
-        return "Reiziger{#"     + idNummer + " "
-                + voorletters   + ". "
-                + tussenvoegsel + " "
-                + achternaam    + ", geb."
-                + geboortedatum +
-                '}';
+        String returnString1 = "Reiziger{#"+ idNummer + " " + voorletters + " ";
+        String returnString2 = achternaam    + ", geb." + geboortedatum + "} ";
+        if (voorletters != null){
+            returnString1 = returnString1 + tussenvoegsel + " ";
+        }
+        if (huisadres != null){
+            returnString2 = returnString2 + huisadres + " ";
+        }
+        if (!OVKaarten.isEmpty()){
+            returnString2 = returnString2 + "met ovchipkaarten : ";
+            for (OVChipkaart ov : OVKaarten) {
+                System.out.println(ov);
+            }
+        } else {
+            returnString2 = returnString2 + "deze reiziger heeft geen ovchipkaart.";
+        }
+        return  returnString1 + returnString2;
     }
 }

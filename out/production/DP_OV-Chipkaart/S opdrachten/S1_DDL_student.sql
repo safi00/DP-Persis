@@ -34,7 +34,7 @@
 -- die ervoor zorgt dat alleen 'M' of 'V' als geldige waarde wordt
 -- geaccepteerd. Test deze regel en neem de gegooide foutmelding op als
 -- commentaar in de uitwerking.
-
+ALTER TABLE medewerkers ADD geslacht CHAR(1) CONSTRAINT m_geslacht_chk CHECK (geslacht='M' OR geslacht='V');
 
 -- S1.2. Nieuwe afdeling
 --
@@ -44,6 +44,14 @@
 -- en valt direct onder de directeur.
 -- Voeg de nieuwe afdeling en de nieuwe medewerker toe aan de database.
 
+INSERT INTO afdelingen (anr, naam, locatie) VALUES (50, 'ONDERZOEK', 'ZWOLLE');
+SET DATESTYLE = 'DMY';
+INSERT INTO medewerkers (mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm, afd, geslacht)
+ VALUES (8000, 'DONK', 'A', 'ACCOUNTENT', 7839, '17-12-1901', 3000, NULL, 50,'M');
+SELECT m.naam FROM medewerkers m JOIN afdelingen a ON m.mnr = a.hoofd AND m.afd = a.anr WHERE a.naam = 'ONDERZOEK' AND m.chef = 7839;
+
+DELETE FROM afdelingen
+WHERE anr = 50;
 
 -- S1.3. Verbetering op afdelingentabel
 --
@@ -54,7 +62,13 @@
 --      de nieuwe sequence.
 --   c) Op enig moment gaat het mis. De betreffende kolommen zijn te klein voor
 --      nummers van 3 cijfers. Los dit probleem op.
-
+SELECT * from afdelingen;
+CREATE SEQUENCE afdelingen_afdnummer INCREMENT BY 10 MINVALUE 50 MAXVALUE 200 owned by afdelingen.anr;
+INSERT INTO afdelingen(anr, naam, locatie, hoofd)
+VALUES
+       (nextval('afdelingen_afdnummer'),'COOKIE','LEIDEN',8000),
+       (nextval('afdelingen_afdnummer'),'WAFFLE','LEIDEN',8000),
+       (nextval('afdelingen_afdnummer'),'PANCAKE','LEIDEN',8000);
 
 -- S1.4. Adressen
 --
@@ -68,13 +82,26 @@
 --    einddatum     moet na de ingangsdatum liggen
 --    telefoon      10 cijfers, uniek
 --    med_mnr       FK, verplicht
-
+CREATE TABLE adressen
+(
+    postcode     VARCHAR(6) PRIMARY KEY CONSTRAINT m_pst_chk CHECK (postcode LIKE '[0-9][0-9][0-9][0-9][A-Z][A-Z]'),
+    huisnummer   VARCHAR(2),
+    ingangsdatum DATE,
+    einddatum    DATE CHECK ( einddatum > ingangsdatum ) ,
+    telefoon     NUMERIC(10) UNIQUE,
+    med_mnr NUMERIC(10) not null,
+    FOREIGN KEY(med_mnr)REFERENCES medewerkers(mnr)
+);
 
 -- S1.5. Commissie
 --
 -- De commissie van een medewerker (kolom `comm`) moet een bedrag bevatten als de medewerker een functie als
 -- 'VERKOPER' heeft, anders moet de commissie NULL zijn. Schrijf hiervoor een beperkingsregel. Gebruik onderstaande
 -- 'illegale' INSERTs om je beperkingsregel te controleren.
+ALTER TABLE medewerkers ADD CONSTRAINT m_comm_chk CHECK (functie = 'VERKOPER' AND comm IS NOT NULL OR functie != 'VERKOPER' AND comm IS NULL);
+
+DELETE FROM medewerkers
+WHERE mnr = 8001;
 
 INSERT INTO medewerkers (mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm)
 VALUES (8001, 'MULLER', 'TJ', 'TRAINER', 7566, '1982-08-18', 2000, 500);

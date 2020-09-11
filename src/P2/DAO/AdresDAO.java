@@ -10,6 +10,7 @@ public interface AdresDAO {
     boolean update(Adres adres) throws SQLException;
     boolean delete(Adres adres) throws SQLException;
     Adres findById(int id) throws SQLException;
+    List<Adres> findByWoonplaats(String woonplaats) throws SQLException;
     List<Adres> findByReiziger(Reiziger reiziger) throws SQLException;
     List<Adres> findAll() throws SQLException;
 }

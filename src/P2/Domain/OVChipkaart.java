@@ -1,15 +1,16 @@
 package P2.Domain;
 
 import java.sql.Date;
+import java.util.List;
 
 public class OVChipkaart {
-    private int      kaart_nummer;
-    private Date     geldig_tot;
-    private int      klasse;
-    private int      saldo;
-    private Reiziger reiziger;
+    private long           kaart_nummer;
+    private Date           geldig_tot;
+    private int            klasse;
+    private Double         saldo;
+    private Reiziger       reiziger;
 
-    public OVChipkaart(int kNummer, Date gTot, int klas, int sal, Reiziger reiz){
+    public OVChipkaart(long kNummer, Date gTot, int klas, Double sal, Reiziger reiz){
         kaart_nummer = kNummer;
         geldig_tot   = gTot;
         klasse       = klas;
@@ -17,14 +18,13 @@ public class OVChipkaart {
         reiziger     = reiz;
     }
 
-
-    public int      getKaart_nummer(){return kaart_nummer;}
+    public long     getKaart_nummer(){return kaart_nummer;}
     public Date     getGeldig_tot(){return geldig_tot;}
     public int      getKlasse(){return klasse;}
-    public int      getSaldo(){return saldo;}
+    public Double   getSaldo(){return saldo;}
     public Reiziger getReiziger(){return reiziger;}
 
-    public void setKaart_nummer(int kaart_nummer) {
+    public void setKaart_nummer(long kaart_nummer) {
         this.kaart_nummer = kaart_nummer;
     }
     public void setGeldig_tot(Date geldig_tot) {
@@ -33,17 +33,19 @@ public class OVChipkaart {
     public void setKlasse(int klasse) {
         this.klasse = klasse;
     }
-    public void setSaldo(int saldo) {
+    public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
 
     @Override
     public String toString() {
-        return "OVChipkaart{" +
-                "kaart_nummer=" + kaart_nummer +
-                ", geldig_tot=" + geldig_tot +
-                ", klasse=" + klasse +
-                ", saldo=" + saldo +
-                ", reiziger=" + reiziger + '}';
+        String returnString1 = "OVChipkaart{" + "kaart #" + kaart_nummer + ", is geldig tot: " + geldig_tot + " ";
+        String returnString2 = ", met een saldo van €" + saldo + ",\ndeze kaart is van: " + reiziger + '}';
+        if (klasse == 2){
+            returnString1 = returnString1 + klasse + "de  klass ";
+        }else {
+            returnString1 = returnString1 + klasse + "ste klass ";
+        }
+        return returnString1 + returnString2;
     }
 }
