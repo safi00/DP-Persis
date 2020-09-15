@@ -29,36 +29,52 @@
 -- S3.1.
 -- Produceer een overzicht van alle cursusuitvoeringen; geef de
 -- cursuscode, de begindatum, de cursuslengte en de naam van de docent.
--- DROP VIEW IF EXISTS s3_1; CREATE OR REPLACE VIEW s3_1 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s3_1; CREATE OR REPLACE VIEW s3_1 AS                                                -- [TEST]
+select co.cursus as code, co.begindatum as begindatum, cu.lengte as lengte, mede.naam as Docentnaam FROM uitvoeringen co
+inner join cursussen cu ON co.cursus = cu.code
+inner join medewerkers mede on co.docent = mede.mnr;
 
 
 -- S3.2.
 -- Geef in twee kolommen naast elkaar de naam van elke cursist (`cursist`)
 -- die een S02-cursus heeft gevolgd, met de naam van de docent (`docent`).
--- DROP VIEW IF EXISTS s3_2; CREATE OR REPLACE VIEW s3_2 AS                                                     -- [TEST]
-
+DROP VIEW IF EXISTS s3_2; CREATE OR REPLACE VIEW s3_2 AS                                                     -- [TEST]
+SELECT cursist.naam AS cursistnamen, mede.naam AS docentnamen FROM medewerkers cursist
+INNER JOIN inschrijvingen a ON cursist.mnr = a.cursist
+INNER JOIN uitvoeringen b ON a.begindatum = b.begindatum AND a.cursus = b.cursus
+INNER JOIN medewerkers mede ON mede.mnr = b.docent
+WHERE a.cursus = 'S02';
 
 -- S3.3.
 -- Geef elke afdeling (`afdeling`) met de naam van het hoofd van die
 -- afdeling (`hoofd`).
--- DROP VIEW IF EXISTS s3_3; CREATE OR REPLACE VIEW s3_3 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s3_3; CREATE OR REPLACE VIEW s3_3 AS                                                     -- [TEST]
+select a.naam as afdeling, mede.naam as hoofd from afdelingen a
+inner join medewerkers mede ON a.hoofd = mede.mnr;
 
 
 -- S3.4.
 -- Geef de namen van alle medewerkers, de naam van hun afdeling (`afdeling`)
 -- en de bijbehorende locatie.
--- DROP VIEW IF EXISTS s3_4; CREATE OR REPLACE VIEW s3_4 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s3_4; CREATE OR REPLACE VIEW s3_4 AS                                                     -- [TEST]
+select mede.naam as medewerker, afd.naam as afdnaam,afd.locatie as locatie from afdelingen afd
+inner join medewerkers mede ON afd.anr = mede.afd;
 
 
 -- S3.5.
 -- Geef de namen van alle cursisten die staan ingeschreven voor de cursus S02 van 12 april 2019
--- DROP VIEW IF EXISTS s3_5; CREATE OR REPLACE VIEW s3_5 AS                                                     -- [TEST]
-
+DROP VIEW IF EXISTS s3_5; CREATE OR REPLACE VIEW s3_5 AS                                                     -- [TEST]
+SELECT cursist.naam AS cursistnamen FROM medewerkers cursist
+INNER JOIN inschrijvingen a ON cursist.mnr = a.cursist
+INNER JOIN uitvoeringen b ON a.begindatum = b.begindatum AND a.cursus = b.cursus
+INNER JOIN medewerkers mede ON mede.mnr = b.docent
+WHERE a.cursus = 'S02' AND a.begindatum = '2019-04-12';
 
 -- S3.6.
 -- Geef de namen van alle medewerkers en hun toelage.
--- DROP VIEW IF EXISTS s3_6; CREATE OR REPLACE VIEW s3_6 AS                                                     -- [TEST]
-
+DROP VIEW IF EXISTS s3_6; CREATE OR REPLACE VIEW s3_6 AS                                                     -- [TEST]
+SELECT mede.naam AS medewerkernamen,scha.toelage FROM medewerkers mede
+inner join schalen scha ON scha.bovengrens > mede.maandsal AND scha.ondergrens < mede.maandsal;
 
 
 -- -------------------------[ HU TESTRAAMWERK ]--------------------------------
