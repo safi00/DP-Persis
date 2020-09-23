@@ -11,6 +11,6 @@ public interface AdresDAO {
     boolean delete(Adres adres) throws SQLException;
     Adres findById(int id) throws SQLException;
     List<Adres> findByWoonplaats(String woonplaats) throws SQLException;
-    List<Adres> findByReiziger(Reiziger reiziger) throws SQLException;
+    Adres findByReiziger(Reiziger reiziger) throws SQLException;
     List<Adres> findAll() throws SQLException;
 }

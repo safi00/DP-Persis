@@ -34,8 +34,16 @@
 -- die ervoor zorgt dat alleen 'M' of 'V' als geldige waarde wordt
 -- geaccepteerd. Test deze regel en neem de gegooide foutmelding op als
 -- commentaar in de uitwerking.
-ALTER TABLE medewerkers ADD geslacht CHAR(1) CONSTRAINT m_geslacht_chk CHECK (geslacht='M' OR geslacht='V');
+ALTER TABLE Medewerkers ADD COLUMN Geslacht char(10);
+ALTER TABLE Medewerkers ADD CONSTRAINT m_geslacht_chk CHECK (geslacht = 'V' OR geslacht = 'M');
 
+INSERT INTO medewerkers (mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm, afd, geslacht)
+ VALUES (8000, 'DONK', 'A', 'DIRECTEUR', 7839, '17-12-1901', 5000, NULL, null,'b');
+
+-- [2020-09-21 20:45:23] [23514] ERROR: new row for relation "medewerkers" violates check constraint "m_geslacht_chk"
+-- [2020-09-21 20:45:23] Detail: Failing row contains (8000, DONK, A, DIRECTEUR, 7839, 1901-12-17, 5000.00, null, null, b         ).
+
+delete from medewerkers where mnr = 8000;
 -- S1.2. Nieuwe afdeling
 --
 -- Het bedrijf krijgt een nieuwe onderzoeksafdeling 'ONDERZOEK' in Zwolle.
@@ -43,15 +51,14 @@ ALTER TABLE medewerkers ADD geslacht CHAR(1) CONSTRAINT m_geslacht_chk CHECK (ge
 -- nieuwe medewerker A DONK aangenomen. Hij krijgt medewerkersnummer 8000
 -- en valt direct onder de directeur.
 -- Voeg de nieuwe afdeling en de nieuwe medewerker toe aan de database.
-
-INSERT INTO afdelingen (anr, naam, locatie) VALUES (50, 'ONDERZOEK', 'ZWOLLE');
 SET DATESTYLE = 'DMY';
-INSERT INTO medewerkers (mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm, afd, geslacht)
- VALUES (8000, 'DONK', 'A', 'ACCOUNTENT', 7839, '17-12-1901', 3000, NULL, 50,'M');
-SELECT m.naam FROM medewerkers m JOIN afdelingen a ON m.mnr = a.hoofd AND m.afd = a.anr WHERE a.naam = 'ONDERZOEK' AND m.chef = 7839;
 
-DELETE FROM afdelingen
-WHERE anr = 50;
+INSERT INTO medewerkers (mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm, afd, geslacht)
+ VALUES (8000, 'DONK', 'A', 'DIRECTEUR', 7839, '17-12-1901', 5000, NULL, null,'M');
+
+INSERT INTO afdelingen (anr, naam, locatie,hoofd) VALUES (50, 'ONDERZOEK', 'ZWOLLE',8000);
+
+UPDATE medewerkers set afd = 50 where mnr = 8000;
 
 -- S1.3. Verbetering op afdelingentabel
 --
@@ -70,6 +77,8 @@ VALUES
        (nextval('afdelingen_afdnummer'),'WAFFLE','LEIDEN',8000),
        (nextval('afdelingen_afdnummer'),'PANCAKE','LEIDEN',8000);
 
+ALTER TABLE afdelingen ALTER COLUMN anr  TYPE numeric(3);
+
 -- S1.4. Adressen
 --
 -- Maak een tabel `adressen`, waarin de adressen van de medewerkers worden
@@ -84,14 +93,16 @@ VALUES
 --    med_mnr       FK, verplicht
 CREATE TABLE adressen
 (
-    postcode     VARCHAR(6) PRIMARY KEY CONSTRAINT m_pst_chk CHECK (postcode LIKE '[0-9][0-9][0-9][0-9][A-Z][A-Z]'),
+    postcode     VARCHAR(6) CONSTRAINT m_pst_chk CHECK (postcode LIKE '[0-9][0-9][0-9][0-9][A-Z][A-Z]'),
     huisnummer   VARCHAR(2),
     ingangsdatum DATE,
     einddatum    DATE CHECK ( einddatum > ingangsdatum ) ,
     telefoon     NUMERIC(10) UNIQUE,
     med_mnr NUMERIC(10) not null,
+    PRIMARY KEY (postcode, huisnummer,ingangsdatum),
     FOREIGN KEY(med_mnr)REFERENCES medewerkers(mnr)
 );
+drop table adressen;
 
 -- S1.5. Commissie
 --
@@ -108,6 +119,15 @@ VALUES (8001, 'MULLER', 'TJ', 'TRAINER', 7566, '1982-08-18', 2000, 500);
 
 INSERT INTO medewerkers (mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm)
 VALUES (8002, 'JANSEN', 'M', 'VERKOPER', 7698, '1981-07-17', 1000, NULL);
+
+--[2020-09-14 15:24:03] [23514] ERROR: new row for relation "medewerkers" violates check constraint "m_comm_chk"
+--[2020-09-14 15:24:03] Detail: Failing row contains (8001, MULLER, TJ, TRAINER, 7566, 1982-08-18, 2000.00, 500.00, 10, null).
+
+--[2020-09-14 15:24:45] [23514] ERROR: new row for relation "medewerkers" violates check constraint "m_comm_chk"
+--[2020-09-14 15:24:45] Detail: Failing row contains (8002, JANSEN, M, VERKOPER, 7698, 1981-07-17, 1000.00, null, 10, null).
+
+--Deze zijn de foutmeldingen dat ik krijg met de CONSTRAINT dat ik heb gezet
+
 
 
 

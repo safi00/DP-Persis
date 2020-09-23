@@ -62,7 +62,8 @@ public class Reiziger {
     public void setHuisadres(Adres ad) {
         huisadres = ad;
     }
-    public void setOVKaarten(OVChipkaart OVKaart) {
+
+    public void addOVKaart(OVChipkaart OVKaart) {
         OVKaarten.add(OVKaart);
     }
 
@@ -85,12 +86,12 @@ public class Reiziger {
             returnString2 = returnString2 + huisadres + " ";
         }
         if (!OVKaarten.isEmpty()){
-            returnString2 = returnString2 + "met ovchipkaarten : ";
+            returnString2 = returnString2 + "met OVChipKaarten : ";
             for (OVChipkaart ov : OVKaarten) {
                 System.out.println(ov);
             }
         } else {
-            returnString2 = returnString2 + "deze reiziger heeft geen ovchipkaart.";
+            returnString2 = returnString2 + "deze reiziger heeft geen OVChipKaart.";
         }
         return  returnString1 + returnString2;
     }

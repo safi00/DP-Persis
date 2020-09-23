@@ -12,10 +12,9 @@ import java.util.List;
 
 
 public class OVChipkaartDAOsql implements OVChipkaartDAO {
-    private Connection conn;
-    private ReizigerDAO reizD;
-
-    public OVChipkaartDAOsql(Connection conn){
+    private  Connection conn;
+    private  ReizigerDAO reizD;
+    public   OVChipkaartDAOsql(Connection conn){
         this.conn = conn;
         this.reizD = new ReizigerDAOsql(conn);
     }
@@ -80,7 +79,7 @@ public class OVChipkaartDAOsql implements OVChipkaartDAO {
             ps.setLong(1,reiziger.getIdNummer());
             ResultSet rs = ps.executeQuery();
         while (rs.next()){
-            returnValue.add(new OVChipkaart(rs.getLong("kaart_nummer"), rs.getDate("geldig_tot"), rs.getInt("klasse"), rs.getDouble("saldo"), reizD.findById(rs.getInt("reiziger_id"))));
+            returnValue.add(new OVChipkaart(rs.getLong("kaart_nummer"), rs.getDate("geldig_tot"), rs.getInt("klasse"), rs.getDouble("saldo"), reiziger));
         }
 //            testPrinter(returnValue, rs);
         return returnValue;

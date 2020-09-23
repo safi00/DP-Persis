@@ -34,8 +34,16 @@
 -- die ervoor zorgt dat alleen 'M' of 'V' als geldige waarde wordt
 -- geaccepteerd. Test deze regel en neem de gegooide foutmelding op als
 -- commentaar in de uitwerking.
-ALTER TABLE medewerkers ADD geslacht CHAR(1) CONSTRAINT m_geslacht_chk CHECK (geslacht='M' OR geslacht='V');
+ALTER TABLE Medewerkers ADD COLUMN Geslacht char(10);
+ALTER TABLE Medewerkers ADD CONSTRAINT m_geslacht_chk CHECK (geslacht = 'V' OR geslacht = 'M');
 
+INSERT INTO medewerkers (mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm, afd, geslacht)
+ VALUES (8000, 'DONK', 'A', 'DIRECTEUR', 7839, '17-12-1901', 5000, NULL, null,'b');
+
+-- [2020-09-21 20:45:23] [23514] ERROR: new row for relation "medewerkers" violates check constraint "m_geslacht_chk"
+-- [2020-09-21 20:45:23] Detail: Failing row contains (8000, DONK, A, DIRECTEUR, 7839, 1901-12-17, 5000.00, null, null, b         ).
+
+delete from medewerkers where mnr = 8000;
 -- S1.2. Nieuwe afdeling
 --
 -- Het bedrijf krijgt een nieuwe onderzoeksafdeling 'ONDERZOEK' in Zwolle.
@@ -68,7 +76,9 @@ VALUES
        (nextval('afdelingen_afdnummer'),'COOKIE','LEIDEN',8000),
        (nextval('afdelingen_afdnummer'),'WAFFLE','LEIDEN',8000),
        (nextval('afdelingen_afdnummer'),'PANCAKE','LEIDEN',8000);
-ALTER SEQUENCE afdelingen_afdnummer MAXVALUE 10000;
+
+ALTER TABLE afdelingen ALTER COLUMN anr  TYPE numeric(3);
+
 -- S1.4. Adressen
 --
 -- Maak een tabel `adressen`, waarin de adressen van de medewerkers worden

@@ -38,7 +38,7 @@ select code, omschrijving from cursussen where lengte = 4;
 -- Geef alle informatie van alle medewerkers, gesorteerd op functie,
 -- en per functie op leeftijd (van jong naar oud).
 DROP VIEW IF EXISTS s2_2; CREATE OR REPLACE VIEW s2_2 AS                                                     -- [TEST]
-select * from medewerkers ORDER BY functie ASC, gbdatum ASC;
+select * from medewerkers ORDER BY functie ASC, gbdatum DESC;
 
 -- S2.3. Door het land
 --
@@ -52,19 +52,19 @@ WHERE uitvoeringen.locatie = 'UTRECHT' or uitvoeringen.locatie = 'MAASTRICHT';
 --
 -- Geef de naam en voorletters van alle medewerkers, behalve van R. Jansen.
 DROP VIEW IF EXISTS s2_4; CREATE OR REPLACE VIEW s2_4 AS                                                     -- [TEST]
-select naam, voorl from medewerkers EXCEPT
-SELECT naam, voorl from medewerkers
-WHERE  naam = 'JANSEN' AND voorl ='R';
--- select naam, voorl from medewerkers
--- WHERE  naam != 'JANSEN' OR voorl !='R';
-
+select naam, voorl from medewerkers
+WHERE naam not in ('JANSEN') OR voorl not in ('R');
+-- SELECT Fruit
+-- FROM Bowl
+-- WHERE Fruit not in ('apple','orange','pear')
+select naam, voorl from medewerkers;
 
 -- S2.5. Nieuwe SQL-cursus
 --
 -- Er wordt een nieuwe uitvoering gepland voor cursus S02, en wel op de
 -- komende 2 maart. De cursus wordt gegeven in Leerdam door Nick Smit.
 -- Voeg deze gegevens toe.
-INSERT INTO uitvoeringen(cursus, begindatum, docent, locatie) VALUES ('S02', '2021-03-02', 7369, 'DE MEERN')
+INSERT INTO uitvoeringen(cursus, begindatum, docent, locatie) VALUES ('S02', '2021-03-02', 7369, 'LEERDAM')
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 
 
@@ -80,8 +80,10 @@ ON CONFLICT DO NOTHING;                                                         
 --
 -- We breiden het salarissysteem uit naar zes schalen. Voer een extra schaal in voor mensen die
 -- tussen de 3001 en 4000 euro verdienen. Zij krijgen een toelage van 500 euro.
-INSERT INTO schalen(snr, ondergrens, bovengrens, toelage) VALUES (6,3001.00,4000.00,500.00)
+UPDATE schalen SET ondergrens = 4001, bovengrens = 9999 WHERE snr = 6;
+INSERT INTO schalen(snr, ondergrens, bovengrens, toelage) VALUES (6,4001.00,9999.00,500.00)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
+select * from schalen;
 
 
 -- S2.8. Nieuwe cursus
@@ -117,26 +119,29 @@ update medewerkers set maandsal = 1.07*maandsal WHERE afd =30 AND functie = 'MAN
 
 -- Zijn collega Alders heeft ook plannen om te vertrekken. Verwijder ook zijn gegevens.
 -- Waarom lukt dit (niet)?
-DELETE from medewerkers WHERE naam = 'Martens' AND naam = 'Alders';
--- bedrijf.public> DELETE from medewerkers WHERE naam = 'Martens' AND naam = 'Alders'
--- [2020-09-15 10:21:19] completed in 5 ms
 
-SELECT * from medewerkers  WHERE naam = 'Martens' AND naam = 'Alders';
--- Ik weet het niet, voor mij lukte het wel
-
+DELETE from medewerkers WHERE naam = 'MARTENS' OR naam = 'ALDERS';
+-- [23503] ERROR: update or delete on table "medewerkers" violates foreign key constraint "i_cursist_fk" on table "inschrijvingen" Detail: Key (mnr)=(7499) is still referenced from table "inschrijvingen".
+DELETE from medewerkers WHERE naam = 'MARTENS';
+-- [2020-09-21 21:32:51] 1 row affected in 3 ms
+DELETE from medewerkers WHERE naam = 'ALDERS';
+-- [2020-09-21 21:33:29] [23503] ERROR: update or delete on table "medewerkers" violates foreign key constraint "i_cursist_fk" on table "inschrijvingen"
+-- [2020-09-21 21:33:29] Detail: Key (mnr)=(7499) is still referenced from table "inschrijvingen".
 
 -- S2.11. Nieuwe afdeling
 --
 -- Je wordt hoofd van de nieuwe afdeling 'FINANCIEN' te Leerdam,
 -- onder de hoede van De Koning. Kies een personeelnummer boven de 8000.
 -- Zorg voor de juiste invoer van deze gegevens.
-INSERT INTO afdelingen(anr, naam, locatie, hoofd) VALUES (nextval(anr), 'FINANCIEN', 'UTRECHT', NULL)
+INSERT INTO afdelingen(anr, naam, locatie, hoofd) VALUES (60, 'FINANCIEN', 'LEERDAM', NULL)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 
 INSERT INTO medewerkers(mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm, afd, geslacht) VALUES (8069, 'MARTINA', 'X', 'DIRECTUER', NULL,'1997-10-27', 5000.00, NULL, 60, 'M')
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 
+update afdelingen set hoofd = 8069 WHERE anr = 60;
 
+select * from afdelingen;
 
 -- -------------------------[ HU TESTRAAMWERK ]--------------------------------
 -- Met onderstaande query kun je je code testen. Zie bovenaan dit bestand

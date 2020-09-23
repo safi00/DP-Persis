@@ -10,9 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReizigerDAOsql implements ReizigerDAO{
-    private Connection conn;
-
-    public ReizigerDAOsql(Connection conn){
+    private  Connection conn;
+    public   ReizigerDAOsql(Connection conn){
         this.conn = conn;
     }
 

@@ -49,26 +49,28 @@ WHERE a.cursus = 'S02';
 -- Geef elke afdeling (`afdeling`) met de naam van het hoofd van die
 -- afdeling (`hoofd`).
 DROP VIEW IF EXISTS s3_3; CREATE OR REPLACE VIEW s3_3 AS                                                     -- [TEST]
+-- INSERT INTO afdelingen(anr, naam, locatie, hoofd) VALUES (60, 'FINANCIEN', 'LEERDAM', NULL);
+-- this was to test the left join
 select a.naam as afdeling, mede.naam as hoofd from afdelingen a
-inner join medewerkers mede ON a.hoofd = mede.mnr;
+LEFT join medewerkers mede ON a.hoofd = mede.mnr;
 
 
 -- S3.4.
 -- Geef de namen van alle medewerkers, de naam van hun afdeling (`afdeling`)
 -- en de bijbehorende locatie.
-DROP VIEW IF EXISTS s3_4; CREATE OR REPLACE VIEW s3_4 AS                                                     -- [TEST]
-select mede.naam as medewerker, afd.naam as afdnaam,afd.locatie as locatie from afdelingen afd
-inner join medewerkers mede ON afd.anr = mede.afd;
+DROP VIEW IF EXISTS s3_4; CREATE OR REPLACE VIEW s3_4 AS
+-- INSERT INTO medewerkers(mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm, afd, geslacht) VALUES (8069, 'MARTINA', 'X', 'DIRECTUER', NULL,'1997-10-27', 5000.00, NULL, NULL, 'M');
+-- this was to test the left join
+select mede.naam as medewerkers, afd.naam as afdnaam, afd.locatie as locatie from medewerkers mede
+left join afdelingen afd ON afd.anr = mede.afd;
 
 
 -- S3.5.
 -- Geef de namen van alle cursisten die staan ingeschreven voor de cursus S02 van 12 april 2019
 DROP VIEW IF EXISTS s3_5; CREATE OR REPLACE VIEW s3_5 AS                                                     -- [TEST]
-SELECT cursist.naam AS cursistnamen FROM medewerkers cursist
-INNER JOIN inschrijvingen a ON cursist.mnr = a.cursist
-INNER JOIN uitvoeringen b ON a.begindatum = b.begindatum AND a.cursus = b.cursus
-INNER JOIN medewerkers mede ON mede.mnr = b.docent
-WHERE a.cursus = 'S02' AND a.begindatum = '2019-04-12';
+select cursist.naam AS cursistnamen FROM inschrijvingen insch
+LEFT JOIN medewerkers cursist ON cursist.mnr = insch.cursist
+WHERE cursus = 'S02' AND begindatum = '2019-04-12';
 
 -- S3.6.
 -- Geef de namen van alle medewerkers en hun toelage.

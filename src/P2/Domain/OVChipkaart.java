@@ -1,7 +1,6 @@
 package P2.Domain;
 
 import java.sql.Date;
-import java.util.List;
 
 public class OVChipkaart {
     private long           kaart_nummer;
@@ -24,9 +23,6 @@ public class OVChipkaart {
     public Double   getSaldo(){return saldo;}
     public Reiziger getReiziger(){return reiziger;}
 
-    public void setKaart_nummer(long kaart_nummer) {
-        this.kaart_nummer = kaart_nummer;
-    }
     public void setGeldig_tot(Date geldig_tot) {
         this.geldig_tot = geldig_tot;
     }

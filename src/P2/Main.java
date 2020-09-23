@@ -21,6 +21,8 @@ public class Main {
         testAdresDAO(ADAO);
         OVChipkaartDAO OVDAO = new OVChipkaartDAOsql(conn);
         testOVChipkaartDAO(OVDAO);
+//        ProductDAO PDAO = new OVChipkaartDAOsql(conn);
+//        testProductDAO(PDAO);
     }
 
     private void getConnection(){
