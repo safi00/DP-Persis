@@ -49,11 +49,9 @@ class DomainTest {
 
     @Test
     public void TestReiziger(){
-        assertEquals(testReiziger.toString(), "De Reiziger id: 0.\n" +
-                "De Reiziger's voorletters: X.\n" +
-                "De Reiziger's tussenVoegsel: .\n" +
-                "De Reiziger's lastname: Martina.\n" +
-                "De Reiziger was born on: 1997-10-27");
+        assertEquals(testReiziger.toString(), "Reiziger{#0 X  Martina, geb.1997-10-27} " +
+                "\nAdres {#37 4206XD Cookie Town-37} " +
+                "\nOVKaarten { deze reiziger heeft geen OVChipKaarten. }");
     }
 
     @Test
@@ -93,28 +91,26 @@ class DomainTest {
 
     @Test
     public void TestAdres(){
-        assertEquals(testAdres.toString(), "Adres{" + "adresID: " + testAdres.getAdresID() +
-                ",\n postcode: '"   + testAdres.getPostcode() + '\'' +
-                ",\n huisnummer: '" + testAdres.getHuisnummer() + '\'' +
-                ",\n straat: '"     + testAdres.getStraat() + '\'' +
-                ",\n woonplaats: '" + testAdres.getWoonplaats() + '\'' +
-                ",\n reizigerID: "  + testAdres.getReiziger() +'}');
+        assertEquals(testAdres.toString(), "Adres {adresID: 37, 4206XD, CookieStraat #37, woonplaats: Cookie Town,\n" +
+                "reiziger: #0 X  Martina}");
     }
 
     @Test
-    public void TestReizigerZonderOVkaart(){
-        assertEquals(testReiziger.getOVKaarten(),"");
+    public void TestReizigerZonderOVKaart(){
+        assertEquals(testReiziger.getOVKaarten().toString(),"[]");
     }
 
     @Test
-    public void TestReizigerMetOVkaarten(){
+    public void TestReizigerMetOVKaarten(){
         testReiziger.addOVKaart(testOVCK1);
         testReiziger.addOVKaart(testOVCK2);
-        assertEquals(testReiziger.getOVKaarten(),"");
+        assertEquals(testReiziger.getOVKaarten().toString(),"[OVChipkaart{kaart #233334444, is geldig tot: 2025-03-14 2de  klass , met een saldo van €100.5,\n" +
+                "deze kaart is van reiziger: #0 X  Martina}, OVChipkaart{kaart #233334445, is geldig tot: 2030-06-17 1ste klass , met een saldo van €27.5,\n" +
+                "deze kaart is van reiziger: #0 X  Martina}]");
     }
 
     @Test
     public void TestProduct(){
-        assertEquals(testProduct.toString(),"");
+        assertEquals(testProduct.toString(),"Product{#12345, Product, ProductBeschrijving, €10.5}");
     }
 }

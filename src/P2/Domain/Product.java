@@ -42,4 +42,9 @@ public class Product {
 //    public void setOVProduct(OVChipkaartProduct OVProduct) {
 //        this.OVProduct = OVProduct;
 //    }
+
+    public String toString() {
+        return "Product{#" + product_nummer + ", " + naam + ", " + beschrijving +
+                ", €" + prijs + "}";
+    }
 }

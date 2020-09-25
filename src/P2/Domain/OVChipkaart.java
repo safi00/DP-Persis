@@ -36,7 +36,7 @@ public class OVChipkaart {
     @Override
     public String toString() {
         String returnString1 = "OVChipkaart{" + "kaart #" + kaart_nummer + ", is geldig tot: " + geldig_tot + " ";
-        String returnString2 = ", met een saldo van €" + saldo + ",\ndeze kaart is van: " + reiziger + '}';
+        String returnString2 = ", met een saldo van €" + saldo + ",\ndeze kaart is van reiziger: #" + reiziger.getIdNummer() + " " + reiziger.getNaam() + '}';
         if (klasse == 2){
             returnString1 = returnString1 + klasse + "de  klass ";
         }else {

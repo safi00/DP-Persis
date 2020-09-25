@@ -21,8 +21,8 @@ public class Main {
         testAdresDAO(ADAO);
         OVChipkaartDAO OVDAO = new OVChipkaartDAOsql(conn);
         testOVChipkaartDAO(OVDAO);
-//        ProductDAO PDAO = new OVChipkaartDAOsql(conn);
-//        testProductDAO(PDAO);
+//        ProductDAO pDAO = new OVChipkaartDAOsql(conn);
+//        testProductDAO(pDAO);
     }
 
     private void getConnection(){
@@ -79,8 +79,8 @@ public class Main {
 
         // Maak een nieuwe reiziger aan en persisteer deze in de database
         String gbdatum = "1981-03-14";
-        Reiziger testreiz = new Reiziger(77, "S", "DE", "Boers", java.sql.Date.valueOf(gbdatum));
-        Adres    testadres  = new Adres   (88,"7777XD", "77ABC", "cookieStraat","SESAME",testreiz);
+        Reiziger testReiz = new Reiziger(77, "S", "DE", "Boers", java.sql.Date.valueOf(gbdatum));
+        Adres    testadres  = new Adres   (88,"7777XD", "77ABC", "cookieStraat","SESAME",testReiz);
         System.out.print("[Test] Eerst " + adresList.size() + " adresList, na AdresDAO.save() ");
         dao.save(testadres);
         adresList = dao.findAll();
@@ -88,14 +88,14 @@ public class Main {
 
         // Voeg aanvullende tests van de ontbrekende CRUD-operaties in.
         System.out.println("update test");
-        dao.update(new Adres(88,"7888XD", "77ABC", "cookieStraat","SESAME",testreiz));
+        dao.update(new Adres(88,"7888XD", "77ABC", "cookieStraat","SESAME",testReiz));
         System.out.println("update checking if it worked:");
         System.out.println("finding the Adres with ID #" + testadres.getAdresID() + ":\n" + dao.findById(testadres.getAdresID()));
         System.out.println();
         System.out.println("delete test:");
         System.out.println(dao.findByWoonplaats(testadres.getWoonplaats()));
         System.out.println();
-        System.out.println("Deleting :\n" + dao.findByReiziger(testreiz));
+        System.out.println("Deleting :\n" + dao.findByReiziger(testReiz));
         dao.delete(testadres);
         System.out.println(adresList.size() + " adresList\n");
     }
@@ -115,8 +115,8 @@ public class Main {
         // Maak een nieuwe reiziger aan en persisteer deze in de database
         String gbdatum = "1981-03-14";
         String gtot = "2025-03-14";
-        Reiziger testreiz = new Reiziger(77, "S", "", "Boers", java.sql.Date.valueOf(gbdatum));
-        OVChipkaart testkaart  = new OVChipkaart (233334444, java.sql.Date.valueOf(gtot), 2, 100.50,testreiz);
+        Reiziger testReiz = new Reiziger(77, "S", "", "Boers", java.sql.Date.valueOf(gbdatum));
+        OVChipkaart testkaart  = new OVChipkaart (233334444, java.sql.Date.valueOf(gtot), 2, 100.50,testReiz);
         System.out.print("[Test] Eerst " + kaartList.size() + " kaartList, na ovChipkaartDAO.save() \n");
         dao.save(testkaart);
         kaartList = dao.findAll();
@@ -124,14 +124,14 @@ public class Main {
 
         // Voeg aanvullende tests van de ontbrekende CRUD-operaties in.
         System.out.println("update test");
-        dao.update(new OVChipkaart (233334444, java.sql.Date.valueOf(gtot), 1, 155.50,testreiz));
+        dao.update(new OVChipkaart (233334444, java.sql.Date.valueOf(gtot), 1, 155.50,testReiz));
         System.out.println("update checking if it worked:");
         System.out.println("finding the kaartnummer with ID #" + testkaart.getKaart_nummer() + ":\n" + dao.findById(testkaart.getKaart_nummer()));
         System.out.println();
         System.out.println("delete test:");
-        System.out.println("alle kaarten van "+ testreiz.getNaam() + "\n:" + dao.findByReiziger(testreiz));
+        System.out.println("alle kaarten van "+ testReiz.getNaam() + "\n:" + dao.findByReiziger(testReiz));
         System.out.println();
-        System.out.println("Deleting :\n" + dao.findByReiziger(testreiz));
+        System.out.println("Deleting :\n" + dao.findByReiziger(testReiz));
         dao.delete(testkaart);
     }
 }

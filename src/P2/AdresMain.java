@@ -2,7 +2,6 @@ package P2;
 
 import P2.DAO.*;
 import P2.Domain.Adres;
-import P2.Domain.OVChipkaart;
 import P2.Domain.Reiziger;
 
 import java.sql.Connection;
@@ -45,6 +44,8 @@ public class AdresMain {
         dao.update(new Adres(88, "7888XD", "77ABC", "cookieStraat", "SESAME", testreiz));
         System.out.println("update checking if it worked:");
         System.out.println("finding the Adres with ID #" + testadres.getAdresID() + ":\n" + dao.findById(testadres.getAdresID()));
+        System.out.println("finding reiz adres");
+        System.out.println(dao.findByReiziger(testreiz));
         System.out.println();
         System.out.println("delete test:");
         System.out.println(dao.findByWoonplaats(testadres.getWoonplaats()));

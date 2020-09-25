@@ -83,15 +83,16 @@ public class Reiziger {
             returnString1 = returnString1 + tussenvoegsel + " ";
         }
         if (huisadres != null){
-            returnString2 = returnString2 + huisadres + " ";
+            returnString2 = returnString2 + "\nAdres {#" + huisadres.getAdresID() + " " + huisadres.getPostcode() + " " + huisadres.getWoonplaats() + "-" + huisadres.getHuisnummer() + "} ";
         }
         if (!OVKaarten.isEmpty()){
-            returnString2 = returnString2 + "met OVChipKaarten : ";
+            returnString2 = returnString2 + "\nmet OVChipKaarten : ";
             for (OVChipkaart ov : OVKaarten) {
-                System.out.println(ov);
+                returnString2 = returnString2 + "\n{#" + ov.getKaart_nummer() + ", expires on " + ov.getGeldig_tot() + ", klasse " + ov.getKlasse() + ", saldo van" + ov.getSaldo() + "} ";
+
             }
         } else {
-            returnString2 = returnString2 + "deze reiziger heeft geen OVChipKaart.";
+            returnString2 = returnString2 + "\nOVKaarten { deze reiziger heeft geen OVChipKaarten. }";
         }
         return  returnString1 + returnString2;
     }
