@@ -1,11 +1,14 @@
 package P2.Domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Product {
-    private long               product_nummer;
+    private final long         product_nummer;
     private String             naam;
     private String             beschrijving;
     private Double             prijs;
-//    private OVChipkaartProduct OVProduct;
+    private List<Product>      OVProduct   = new ArrayList<>();
 
     public Product(long nummer, String productNaam, String productBeschrijving, Double productPrijs){
         product_nummer = nummer;
@@ -26,9 +29,9 @@ public class Product {
     public Double getPrijs() {
         return prijs;
     }
-//    public OVChipkaartProduct getOVProduct() {
-//        return OVProduct;
-//    }
+    public List<Product> getOVProduct() {
+        return OVProduct;
+    }
 
     public void setNaam(String naam) {
         this.naam = naam;
@@ -39,9 +42,9 @@ public class Product {
     public void setPrijs(Double prijs) {
         this.prijs = prijs;
     }
-//    public void setOVProduct(OVChipkaartProduct OVProduct) {
-//        this.OVProduct = OVProduct;
-//    }
+    public void addOVProduct(Product OVProduct) {
+        this.OVProduct.add(OVProduct);
+    }
 
     public String toString() {
         return "Product{#" + product_nummer + ", " + naam + ", " + beschrijving +

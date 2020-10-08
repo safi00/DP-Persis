@@ -17,35 +17,35 @@ public class Adres {
         wooner     = reiz;
     }
 
-    public int getAdresID() {
+    public int      getAdresID() {
         return adresID;
     }
-    public String getPostcode() {
+    public String   getPostcode() {
         return postcode;
     }
-    public String getHuisnummer() {
+    public String   getHuisnummer() {
         return huisnummer;
     }
-    public String getStraat() {
+    public String   getStraat() {
         return straat;
     }
-    public String getWoonplaats() {
+    public String   getWoonplaats() {
         return woonplaats;
     }
     public Reiziger getReiziger() {
         return wooner;
     }
 
-    public void setAdresID(int adresID) {
+    public void setAdresID   (int adresID) {
         this.adresID = adresID;
     }
-    public void setPostcode(String postcode) {
+    public void setPostcode  (String postcode) {
         this.postcode = postcode;
     }
     public void setHuisnummer(String huisnummer) {
         this.huisnummer = huisnummer;
     }
-    public void setStraat(String straat) {
+    public void setStraat    (String straat) {
         this.straat = straat;
     }
     public void setWoonplaats(String woonplaats) {
@@ -56,7 +56,9 @@ public class Adres {
     }
 
     public String toString() {
-        return "Adres {" + "adresID: " + adresID + ", " + postcode + ", " + straat + " #" + huisnummer + ", woonplaats: " + woonplaats +
-                  ",\nreiziger: #" + wooner.getIdNummer() + " " + wooner.getNaam() + '}';
+        return  "Adres {" + "adresID: " + adresID + ", " +
+                postcode + ", " + straat + " #" + huisnummer +
+                ", woonplaats: " + woonplaats +
+                ", reiziger: #" + wooner.getIdNummer() + '}';
     }
 }

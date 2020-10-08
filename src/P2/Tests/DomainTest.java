@@ -96,6 +96,12 @@ class DomainTest {
     }
 
     @Test
+    public void TestGetAdres(){
+        assertEquals(testReiziger.getHuisAdres().toString(), "Adres {adresID: 37, 4206XD, CookieStraat #37, woonplaats: Cookie Town,\n" +
+                "reiziger: #0 X  Martina}");
+    }
+
+    @Test
     public void TestReizigerZonderOVKaart(){
         assertEquals(testReiziger.getOVKaarten().toString(),"[]");
     }

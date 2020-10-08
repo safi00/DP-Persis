@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Reiziger {
-    private int                idNummer;
-    private String             voorletters;
-    private String             tussenvoegsel;
-    private String             achternaam;
-    private Date               geboortedatum;
-    private Adres              huisadres;
-    private List<OVChipkaart>  OVKaarten = new ArrayList<>();
+    private int                      idNummer;
+    private String                   voorletters;
+    private String                   tussenvoegsel;
+    private String                   achternaam;
+    private Date                     geboortedatum;
+    private Adres                    huisadres;
+    private final List<OVChipkaart>  OVKaarten = new ArrayList<>();
 
     public Reiziger(int idNum, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
         this.idNummer      = idNum;
@@ -78,21 +78,21 @@ public class Reiziger {
 
     public String toString() {
         String returnString1 = "Reiziger{#"+ idNummer + " " + voorletters + " ";
-        String returnString2 = achternaam    + ", geb." + geboortedatum + "} ";
+        StringBuilder returnString2 = new StringBuilder(achternaam + ", geb." + geboortedatum + "} ");
         if (voorletters != null){
             returnString1 = returnString1 + tussenvoegsel + " ";
         }
         if (huisadres != null){
-            returnString2 = returnString2 + "\nAdres {#" + huisadres.getAdresID() + " " + huisadres.getPostcode() + " " + huisadres.getWoonplaats() + "-" + huisadres.getHuisnummer() + "} ";
+            returnString2.append("\nAdres {#").append(huisadres.getAdresID()).append(" ").append(huisadres.getPostcode()).append(" ").append(huisadres.getWoonplaats()).append("-").append(huisadres.getHuisnummer()).append("} ");
         }
         if (!OVKaarten.isEmpty()){
-            returnString2 = returnString2 + "\nmet OVChipKaarten : ";
+            returnString2.append("\nmet OVChipKaarten : ");
             for (OVChipkaart ov : OVKaarten) {
-                returnString2 = returnString2 + "\n{#" + ov.getKaart_nummer() + ", expires on " + ov.getGeldig_tot() + ", klasse " + ov.getKlasse() + ", saldo van" + ov.getSaldo() + "} ";
+                returnString2.append("\n{#").append(ov.getKaart_nummer()).append(", expires on ").append(ov.getGeldig_tot()).append(", klasse ").append(ov.getKlasse()).append(", saldo van").append(ov.getSaldo()).append("} ");
 
             }
         } else {
-            returnString2 = returnString2 + "\nOVKaarten { deze reiziger heeft geen OVChipKaarten. }";
+            returnString2.append("\nOVKaarten { deze reiziger heeft geen OVChipKaarten. }");
         }
         return  returnString1 + returnString2;
     }

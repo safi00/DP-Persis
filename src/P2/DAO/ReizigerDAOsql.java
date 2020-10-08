@@ -14,9 +14,14 @@ public class ReizigerDAOsql implements ReizigerDAO{
     private  AdresDAO       adresD;
     private  OVChipkaartDAO ovChipD;
     public   ReizigerDAOsql(Connection conn){
-        this.conn = conn;
+        this.conn    = conn;
     }
-
+    public void   setAdresDao(AdresDAO dao) {
+        this.adresD  = dao;
+    }
+    public void   setOVCDao(OVChipkaartDAO dao) {
+        this.ovChipD = dao;
+    }
 
     @Override
     public boolean save(Reiziger reiziger) throws SQLException {
@@ -80,7 +85,6 @@ public class ReizigerDAOsql implements ReizigerDAO{
         ResultSet rs = ps.executeQuery();
         System.out.println();
         System.out.println("Alle reizigers met geboortedatum (" + datum + ") : ");
-//            testPrinter(returnValue, rs);
         while (rs.next()){
             returnValue.add(new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"), rs.getString("achternaam"), rs.getDate("geboortedatum")));}
         return returnValue;
@@ -94,20 +98,9 @@ public class ReizigerDAOsql implements ReizigerDAO{
         ResultSet rs = ps.executeQuery();
         System.out.println();
         System.out.println("Alle reizigers : ");
-//            testPrinter(returnValue, rs);
         while (rs.next()){
             returnValue.add(new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"), rs.getString("achternaam"), rs.getDate("geboortedatum")));}
         return returnValue;
     }
 
-    private void testPrinter(List<Reiziger> returnValue, ResultSet rs) throws SQLException {
-        while (rs.next()){
-            System.out.println(
-                    "#" + rs.getString("reiziger_id")   + ": " +
-                            rs.getString("voorletters")   + ". " +
-                            rs.getString("tussenvoegsel") + " " +
-                            rs.getString("achternaam")    + " " +
-                            "(" + rs.getString("geboortedatum") + ")");
-        }
-    }
 }

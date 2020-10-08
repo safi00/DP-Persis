@@ -11,11 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdresDAOsql implements AdresDAO {
-    private  Connection conn;
-    private  ReizigerDAO reizD;
-    public   AdresDAOsql(Connection conn){
+    private final Connection conn;
+    private       ReizigerDAO reizD;
+    public        AdresDAOsql(Connection conn){
         this.conn = conn;
-        this.reizD = new ReizigerDAOsql(conn);
+    }
+    public void   setRdao(ReizigerDAO dao) {
+        this.reizD = dao;
     }
 
     @Override
@@ -101,7 +103,6 @@ public class AdresDAOsql implements AdresDAO {
         while (rs.next()){
             returnValue.add(new Adres(rs.getInt("adres_id"), rs.getString("postcode"), rs.getString("huisnummer"), rs.getString("straat"), rs.getString("woonplaats"), reizD.findById(rs.getInt("reiziger_id"))));
         }
-//            findPrinter(returnValue, rs);
         return returnValue;
     }
 
@@ -115,18 +116,6 @@ public class AdresDAOsql implements AdresDAO {
         while (rs.next()){
             returnValue.add(new Adres(rs.getInt("adres_id"), rs.getString("postcode"), rs.getString("huisnummer"), rs.getString("straat"), rs.getString("woonplaats"), reizD.findById(rs.getInt("reiziger_id"))));
         }
-//            findPrinter(returnValue, rs);
         return returnValue;
     }
-
-    private void findPrinter(List<Adres> returnValue, ResultSet rs) throws SQLException {
-        while (rs.next()){
-//                            rs.getString("adres_id")
-//                            rs.getString("postcode")
-//                            rs.getString("huisnummer")
-//                            rs.getString("straat")
-//                            rs.getString("woonplaats")
-//                            rs.getString("reiziger_id")
-            returnValue.add(new Adres(rs.getInt("adres_id"), rs.getString("postcode"), rs.getString("huisnummer"), rs.getString("straat"), rs.getString("woonplaats"), reizD.findById(rs.getInt("reiziger_id"))));
-        }}
 }
