@@ -33,6 +33,7 @@ public class AdresDAOsql implements AdresDAO {
             ps.executeUpdate();
             System.out.println();
             System.out.println("adres saved.");
+            adres.getReiziger().setHuisadres(adres);
         return true;
     }
 
@@ -83,8 +84,6 @@ public class AdresDAOsql implements AdresDAO {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, reiziger.getIdNummer());
         ResultSet rs = ps.executeQuery();
-        System.out.println();
-        System.out.println("adres van reiziger id #" + reiziger.getIdNummer() + " : ");
         while (rs.next()){
             returnValue = new Adres(rs.getInt("adres_id"), rs.getString("postcode"), rs.getString("huisnummer"), rs.getString("straat"), rs.getString("woonplaats"), reiziger);
         }

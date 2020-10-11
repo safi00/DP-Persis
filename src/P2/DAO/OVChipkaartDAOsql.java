@@ -47,7 +47,7 @@ public class OVChipkaartDAOsql implements OVChipkaartDAO {
         ps.setDate   (4,lastUpdate);
         ps.executeUpdate();
         System.out.println();
-        System.out.println("ovKaart saved.");
+        System.out.println("ovKaart product saved.");
         return true;
     }
 
@@ -67,12 +67,9 @@ public class OVChipkaartDAOsql implements OVChipkaartDAO {
 
     @Override
     public boolean delete(OVChipkaart ovChipkaart) throws SQLException {
-        String query = "DELETE FROM ov_chipkaart_product WHERE kaart_nummer = ?";
+        relationDelete(ovChipkaart);
+        String query = "DELETE FROM ov_chipkaart WHERE kaart_nummer = ?";
         PreparedStatement ps = conn.prepareStatement(query);
-        ps.setLong(1,ovChipkaart.getKaart_nummer());
-        ps.executeUpdate();
-        query = "DELETE FROM ov_chipkaart WHERE kaart_nummer = ?";
-        ps = conn.prepareStatement(query);
         ps.setLong(1,ovChipkaart.getKaart_nummer());
         ps.executeUpdate();
         System.out.println();
@@ -117,6 +114,23 @@ public class OVChipkaartDAOsql implements OVChipkaartDAO {
     }
 
     @Override
+    public List<OVChipkaart> findByProduct(Product product) throws SQLException {
+        List<OVChipkaart> returnValue = new ArrayList<>();
+        String query = "SELECT ov.* FROM ov_chipkaart ov LEFT JOIN ov_chipkaart_product ocp on ov.kaart_nummer = ocp.kaart_nummer where product_nummer = ?";
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setLong(1,product.getProduct_nummer());
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()){
+            OVChipkaart listValue = new OVChipkaart(rs.getLong("kaart_nummer"), rs.getDate("geldig_tot"), rs.getInt("klasse"), rs.getDouble("saldo"), reizD.findById(rs.getInt("reiziger_id")));
+            for (Product r : prodD.findByOVChipKaart(listValue.getKaart_nummer())) {
+                listValue.addOVProduct(r);
+            }
+            returnValue.add(listValue);
+        }
+        return returnValue;
+    }
+
+    @Override
     public List<OVChipkaart> findAll() throws SQLException {
         List<OVChipkaart> returnValue = new ArrayList<>();
             String query = "SELECT * FROM ov_chipkaart";
@@ -131,5 +145,10 @@ public class OVChipkaartDAOsql implements OVChipkaartDAO {
             }
         return returnValue;
     }
-
+    public void relationDelete(OVChipkaart ovChipkaart) throws SQLException {
+        String query = "DELETE FROM ov_chipkaart_product WHERE kaart_nummer = ?";
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setLong(1,ovChipkaart.getKaart_nummer());
+        ps.executeUpdate();
+    }
 }

@@ -8,7 +8,7 @@ public class Product {
     private String             naam;
     private String             beschrijving;
     private Double             prijs;
-    private List<Product>      OVProduct   = new ArrayList<>();
+    private List<OVChipkaart>  ovKaarten   = new ArrayList<>();
 
     public Product(long nummer, String productNaam, String productBeschrijving, Double productPrijs){
         product_nummer = nummer;
@@ -29,8 +29,8 @@ public class Product {
     public Double getPrijs() {
         return prijs;
     }
-    public List<Product> getOVProduct() {
-        return OVProduct;
+    public List<OVChipkaart> getOVs() {
+        return ovKaarten;
     }
 
     public void setNaam(String naam) {
@@ -42,8 +42,11 @@ public class Product {
     public void setPrijs(Double prijs) {
         this.prijs = prijs;
     }
-    public void addOVProduct(Product OVProduct) {
-        this.OVProduct.add(OVProduct);
+    public void addOV(OVChipkaart ov) {
+        this.ovKaarten.add(ov);
+    }
+    public void removeOV(OVChipkaart ov) {
+        this.ovKaarten.remove(ov);
     }
 
     public String toString() {

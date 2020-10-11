@@ -1,5 +1,6 @@
 package P2.DAO;
 
+import P2.Domain.OVChipkaart;
 import P2.Domain.Reiziger;
 
 import java.sql.Connection;
@@ -10,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReizigerDAOsql implements ReizigerDAO{
-    private  Connection     conn;
-    private  AdresDAO       adresD;
-    private  OVChipkaartDAO ovChipD;
-    public   ReizigerDAOsql(Connection conn){
+    private final Connection     conn;
+    private       AdresDAO       adresD;
+    private       OVChipkaartDAO ovChipD;
+    public        ReizigerDAOsql(Connection conn){
         this.conn    = conn;
     }
     public void   setAdresDao(AdresDAO dao) {
@@ -33,7 +34,6 @@ public class ReizigerDAOsql implements ReizigerDAO{
         ps.setString(4,reiziger.getAchternaam());
         ps.setDate  (5,reiziger.getGeboortedatum());
         ps.executeUpdate();
-        System.out.println();
         System.out.println("reiziger saved.");
         return true;
     }
@@ -48,18 +48,25 @@ public class ReizigerDAOsql implements ReizigerDAO{
         ps.setDate  (4,reiziger.getGeboortedatum());
         ps.setInt   (5,reiziger.getIdNummer());
         ps.executeUpdate();
-        System.out.println();
         System.out.println("reiziger updated.");
         return true;
     }
 
     @Override
     public boolean delete(Reiziger reiziger) throws SQLException {
+        List<OVChipkaart> ovc = reiziger.getOVKaarten();
+        if (reiziger.getHuisAdres()!=null) {
+            adresD.delete(reiziger.getHuisAdres());
+        }
+        if (!ovc.isEmpty()) {
+            for (OVChipkaart ov : ovc) {
+                ovChipD.delete(ov);
+            }
+        }
         String query = "DELETE FROM reiziger WHERE reiziger_id = ?";
         PreparedStatement ps = conn.prepareStatement(query);
         ps.setInt(1,reiziger.getIdNummer());
         ps.executeUpdate();
-        System.out.println();
         System.out.println("reiziger deleted.");
         return true;
     }
@@ -73,6 +80,10 @@ public class ReizigerDAOsql implements ReizigerDAO{
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             returnValue = new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"), rs.getString("achternaam"), rs.getDate("geboortedatum")); }
+            returnValue.setHuisadres(adresD.findByReiziger(returnValue));
+            for (OVChipkaart o : ovChipD.findByReiziger(returnValue)) {
+                returnValue.addOVKaart(o);
+            }
         return returnValue;
     }
 
@@ -84,9 +95,15 @@ public class ReizigerDAOsql implements ReizigerDAO{
         ps.setDate(1,java.sql.Date.valueOf(datum));
         ResultSet rs = ps.executeQuery();
         System.out.println();
-        System.out.println("Alle reizigers met geboortedatum (" + datum + ") : ");
+        System.out.println("Alle reizigers met geboortedatum (" + datum + "):\n");
         while (rs.next()){
-            returnValue.add(new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"), rs.getString("achternaam"), rs.getDate("geboortedatum")));}
+            Reiziger listValue = new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"), rs.getString("achternaam"), rs.getDate("geboortedatum"));
+            listValue.setHuisadres(adresD.findByReiziger(listValue));
+            returnValue.add(listValue);
+            for (OVChipkaart o : ovChipD.findByReiziger(listValue)) {
+                listValue.addOVKaart(o);
+            }
+        }
         return returnValue;
     }
 
@@ -96,11 +113,14 @@ public class ReizigerDAOsql implements ReizigerDAO{
         String query = "SELECT * FROM reiziger";
         PreparedStatement ps = conn.prepareStatement(query);
         ResultSet rs = ps.executeQuery();
-        System.out.println();
-        System.out.println("Alle reizigers : ");
         while (rs.next()){
-            returnValue.add(new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"), rs.getString("achternaam"), rs.getDate("geboortedatum")));}
+            Reiziger listValue = new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"), rs.getString("achternaam"), rs.getDate("geboortedatum"));
+            listValue.setHuisadres(adresD.findByReiziger(listValue));
+            for (OVChipkaart o : ovChipD.findByReiziger(listValue)) {
+                listValue.addOVKaart(o);
+            }
+            returnValue.add(listValue);
+        }
         return returnValue;
     }
-
 }

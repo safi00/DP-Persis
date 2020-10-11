@@ -2,11 +2,9 @@ package P2.DAO;
 
 import P2.Domain.OVChipkaart;
 import P2.Domain.Product;
+import P2.Domain.Reiziger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +33,15 @@ public class      ProductDAOsql implements ProductDAO {
     }
 
     @Override
+    public boolean addOVChipkaart(OVChipkaart ovc, Product product, String status, Date lastUpdate) throws SQLException {
+        ovChipD.addProduct(ovc,product,status,lastUpdate);
+        product.addOV(ovc);
+        return true;
+    }
+
+    @Override
     public boolean update(Product product) throws SQLException {
+        relationDelete(product);
         String query = "UPDATE product SET naam = ?, beschrijving = ?, prijs = ? WHERE product_nummer = ?";
         PreparedStatement ps = conn.prepareStatement(query);
         ps.setString (1,product.getNaam());
@@ -43,7 +49,6 @@ public class      ProductDAOsql implements ProductDAO {
         ps.setDouble (3,product.getPrijs());
         ps.setLong   (4,product.getProduct_nummer());
         ps.executeUpdate();
-
         System.out.println();
         System.out.println("Product updated.");
         return true;
@@ -51,12 +56,9 @@ public class      ProductDAOsql implements ProductDAO {
 
     @Override
     public boolean delete(Product product) throws SQLException {
-        String query = "DELETE FROM ov_chipkaart_product WHERE product_nummer = ?";
+        relationDelete(product);
+        String query = "DELETE FROM product WHERE product_nummer = ?";
         PreparedStatement ps = conn.prepareStatement(query);
-        ps.setLong(1,product.getProduct_nummer());
-        ps.executeUpdate();
-        query = "DELETE FROM product WHERE product_nummer = ?";
-        ps = conn.prepareStatement(query);
         ps.setLong(1,product.getProduct_nummer());
         ps.executeUpdate();
         System.out.println();
@@ -71,14 +73,25 @@ public class      ProductDAOsql implements ProductDAO {
         PreparedStatement ps = conn.prepareStatement(query);
         ps.setLong(1, ov);
         ResultSet rs = ps.executeQuery();
-        System.out.println();
-        System.out.println("all Products from ov #" + ov +" :");
         while (rs.next()){
             Product p = new Product(rs.getLong("product_nummer"), rs.getString("naam"), rs.getString("beschrijving"), rs.getDouble("prijs"));
             returnValue.add(p);
-            System.out.println(p);
         }
         return returnValue;
+    }
+
+    @Override
+    public Product findById(long idnummer) throws SQLException {
+        Product returnValue = null;
+        String query = "SELECT * FROM product Where product_nummer = ?";
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setLong(1,idnummer);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()){
+            returnValue = new Product(rs.getLong("product_nummer"), rs.getString("naam"), rs.getString("beschrijving"), rs.getDouble("prijs"));
+        }
+        return returnValue;
+
     }
 
     @Override
@@ -87,13 +100,19 @@ public class      ProductDAOsql implements ProductDAO {
         String query = "SELECT * FROM product";
         PreparedStatement ps = conn.prepareStatement(query);
         ResultSet rs = ps.executeQuery();
-        System.out.println();
-        System.out.println("all Products :");
         while (rs.next()){
-
             returnValue.add(new Product(rs.getLong("product_nummer"), rs.getString("naam"), rs.getString("beschrijving"), rs.getDouble("prijs")));
         }
         return returnValue;
     }
 
+    public void relationDelete(Product product) throws SQLException {
+        String query = "DELETE FROM ov_chipkaart_product WHERE product_nummer = ?";
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setLong(1,product.getProduct_nummer());
+        ps.executeUpdate();
+        for (OVChipkaart ov : ovChipD.findByProduct(product)){
+            product.removeOV(ov);
+        }
+    }
 }
